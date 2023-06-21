@@ -79,6 +79,7 @@ class GenericClient(object):
             api_endpoint=None,
             username=None,
             password=None,
+            otp=None,
             login_method=LOGIN_METHOD_BASIC,
             request_log_level=None
     ):
@@ -86,6 +87,7 @@ class GenericClient(object):
             else config['api_endpoint']
         self.username = username if username else config['username']
         self.password = password if password else config['password']
+        self.otp = otp if otp else config.get('otp', default=None)
         self.login_method = config.get('login_method', login_method)
         assert self.login_method in self.LOGIN_METHODS, \
             'Invalid value %r for login_method' % (login_method,)
@@ -104,6 +106,10 @@ class GenericClient(object):
     def _login_session(self):
         self.login_method = self.LOGIN_METHOD_SESSION
         self._session = requests.Session()
+        if self.otp:
+            self._session.headers.update({
+                'OTP': self.otp
+            })
         full_url = self._get_full_url('/accounts/action/')
         kwargs = self._get_req_args(query_params={'do': 'login'})
         data = simplejson.dumps(
