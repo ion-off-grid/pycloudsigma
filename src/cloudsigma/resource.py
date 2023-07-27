@@ -201,6 +201,9 @@ class Drive(ResourceBase):
             query_params['avoid'] = ','.join(avoid)
         return super(Drive, self).create(data, query_params=query_params)
 
+class RemoteSnapshots(ResourceBase):
+    resource_name = 'remotesnapshots'
+
 class DriveKVM(ResourceBase):
     resource_name = 'drives_kvm'
 

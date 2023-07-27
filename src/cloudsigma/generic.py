@@ -143,10 +143,12 @@ class GenericClient(object):
         if not full_url.endswith("/"):
             full_url += "/"
 
+        print(f"Calling URL: {full_url}")
         return full_url
 
     def _process_response(self, resp, return_list=False):
         resp_data = None
+        print(f'Response {resp.status_code}, dir(resp)')
         request_id = resp.headers.get('X-REQUEST-ID', None)
         if resp.status_code in (200, 201, 202):
             resp_data = copy.deepcopy(resp.json())
